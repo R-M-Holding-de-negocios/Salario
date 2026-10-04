@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '24'
+      - name: Validar JavaScript
+        run: node --check landingpage-desafio-amarelo/landingpage/script.js
+      - name: Validar arquivos locais da página
+        run: node scripts/check-site.cjs
