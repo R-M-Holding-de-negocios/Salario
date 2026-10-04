@@ -18,6 +18,11 @@ html:has(.future-bar-visible){scroll-padding-top:calc(var(--future-bar-height) +
 .future-bar p{margin:0;font-size:15px;font-weight:700;line-height:1.4}
 .future-clock{display:flex;flex-direction:column;align-items:center;flex-shrink:0;gap:2px}
 #future-timer{font-size:24px;font-weight:800;line-height:1.2;color:var(--yellow);font-variant-numeric:tabular-nums;white-space:nowrap}
+#future-timer{display:inline-flex;align-items:center;gap:1px}
+.timer-digit,.timer-separator{position:relative;display:inline-block;height:1.2em;overflow:hidden}
+.timer-digit{width:1ch;mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 12%,#000 88%,transparent)}
+.timer-separator{width:.45em;text-align:center}
+.timer-number{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
 .route-intro{top:24px}
 .future-bar-visible .route-intro{top:calc(var(--future-bar-height) + 24px)}
 @media(max-width:680px){

@@ -17,13 +17,55 @@ if (futureTimer) {
   } catch {
     // Mantém o cronômetro funcionando se o navegador bloquear o armazenamento.
   }
+  // Each digit rolls independently, while separators stay still.
+  let previousTime = '';
+  let digitSlots = [];
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const renderTime = time => {
+    if (time === previousTime) return;
+    if (time.length !== previousTime.length) {
+      futureTimer.replaceChildren();
+      digitSlots = [...time].map(character => {
+        const slot = document.createElement('span');
+        slot.className = character === ':' ? 'timer-separator' : 'timer-digit';
+        slot.setAttribute('aria-hidden', 'true');
+        const current = document.createElement('span');
+        current.className = 'timer-number';
+        current.textContent = character;
+        slot.append(current);
+        futureTimer.append(slot);
+        return { slot, current };
+      });
+    } else {
+      [...time].forEach((character, index) => {
+        if (character === previousTime[index]) return;
+        const { slot, current } = digitSlots[index];
+        slot.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
+        slot.replaceChildren(current);
+        const oldCharacter = current.textContent;
+        current.textContent = character;
+        if (reducedMotion.matches || document.hidden ||
+            !document.body.classList.contains('future-bar-visible')) return;
+        const outgoing = document.createElement('span');
+        outgoing.className = 'timer-number';
+        outgoing.textContent = oldCharacter;
+        slot.append(outgoing);
+        const options = { duration: 450, easing: 'cubic-bezier(.22,1,.36,1)' };
+        current.animate([{ transform: 'translateY(100%)' }, { transform: 'translateY(0)' }], options);
+        const exit = outgoing.animate([{ transform: 'translateY(0)' }, { transform: 'translateY(-100%)' }], options);
+        exit.onfinish = () => outgoing.remove();
+      });
+    }
+    futureTimer.setAttribute('aria-label', `Tempo decorrido desde a primeira visita: ${time}`);
+    previousTime = time;
+  };
   const updateTimer = () => {
     const elapsed = Math.max(0, Math.floor((Date.now() - startedAt) / 1000));
     const hours = Math.floor(elapsed / 3600);
     const minutes = Math.floor(elapsed / 60) % 60;
     const seconds = elapsed % 60;
-    futureTimer.textContent = [hours, minutes, seconds]
-      .map(value => String(value).padStart(2, '0')).join(':');
+    renderTime([hours, minutes, seconds]
+      .map(value => String(value).padStart(2, '0')).join(':'));
   };
   updateTimer();
   setInterval(updateTimer, 1000);
