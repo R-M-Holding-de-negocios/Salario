@@ -3,6 +3,31 @@
 @media(max-width:680px){.container{width:calc(100% - 36px)}.nav{min-height:76px;gap:12px}.brand{font-size:16px;gap:8px}.brand-icon{width:34px;height:34px;font-size:23px}.brand small{font-size:7px}.nav nav>a:not(.nav-cta){display:none}.nav nav .nav-cta{font-size:10px;padding:9px 11px}.hero{padding:38px 0}.hero-grid,.split,.route,.offer-grid,.faq-grid{grid-template-columns:1fr;gap:34px}.hero h1{font-size:40px;max-width:500px}.lead{font-size:16px}.hero-image{transform:none;margin:8px auto 0;max-width:470px}.eyebrow{font-size:9px;letter-spacing:.1em}.hero-copy>.button{width:100%}.hero-facts{justify-content:space-between;gap:10px}.hero-facts strong{font-size:18px}.hero-facts span{font-size:10px}.audience .container{display:block}.audience-label{display:block;max-width:none;margin-bottom:8px}.audience p{line-height:1.9}.audience i{padding:0 4px}.section{padding:58px 0}h2{font-size:34px}.cards{grid-template-columns:1fr;gap:16px}.card{padding:26px}.card-icon{margin-bottom:18px}.route-intro{position:static}.offer-card{padding:28px 24px}.faq-grid{gap:10px}.footer-grid{flex-direction:column;align-items:flex-start;gap:18px}.closing{padding:52px 0}.price{font-size:72px}.button{font-size:14px}.hero-image figcaption{font-size:10px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.button{transition:none}.button:hover{transform:none}}
 
+/* Barra fixa com o tempo decorrido na página. */
+:root{--future-bar-height:76px}
+body{padding-top:0;transition:padding-top .6s cubic-bezier(.22,1,.36,1)}
+body.future-bar-visible{padding-top:var(--future-bar-height)}
+html{scroll-padding-top:16px}
+html:has(.future-bar-visible){scroll-padding-top:calc(var(--future-bar-height) + 16px)}
+.future-bar{visibility:hidden;transform:translateY(-100%)}
+.future-bar-visible .future-bar{visibility:visible;transform:translateY(0);animation:future-bar-enter .6s cubic-bezier(.22,1,.36,1) both}
+@keyframes future-bar-enter{from{transform:translateY(-100%)}to{transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){body{transition:none}.future-bar-visible .future-bar{animation:none}}
+.future-bar{position:fixed;inset:0 0 auto;z-index:90;background:#b91c1c;color:#fff;border-bottom:2px solid #991b1b;box-shadow:0 4px 16px #00000018}
+.future-bar-content{min-height:var(--future-bar-height);display:flex;align-items:center;justify-content:center;gap:32px;padding:10px 0;box-sizing:border-box}
+.future-bar p{margin:0;font-size:15px;font-weight:700;line-height:1.4}
+.future-clock{display:flex;flex-direction:column;align-items:center;flex-shrink:0;gap:2px}
+#future-timer{font-size:24px;font-weight:800;line-height:1.2;color:var(--yellow);font-variant-numeric:tabular-nums;white-space:nowrap}
+.route-intro{top:24px}
+.future-bar-visible .route-intro{top:calc(var(--future-bar-height) + 24px)}
+@media(max-width:680px){
+ :root{--future-bar-height:108px}
+ .future-bar-content{flex-direction:column;gap:6px;text-align:center}
+ .future-bar p{font-size:12px;max-width:340px}
+ .future-clock{flex-direction:row;gap:10px}
+ #future-timer{font-size:22px}
+}
+
 /* Preserve a imagem inteira em qualquer largura. */
 .hero-image img{width:100%;height:auto}
 
